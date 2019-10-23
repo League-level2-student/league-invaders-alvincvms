@@ -1,6 +1,7 @@
 package LeagueInvaders;
 
 import java.awt.Dimension;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
@@ -11,8 +12,8 @@ public class LeagueInvaders {
 	}
 	
 	JFrame frame;
-	final int width = 500;
-	final int height = 800;
+	final static int width = 500;
+	final static int height = 800;
 	
 	GamePanel GPanel;
 	
@@ -23,6 +24,7 @@ public class LeagueInvaders {
 	
 	void setup() {
 		frame.add(GPanel);
+		frame.addKeyListener(GPanel);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setPreferredSize(new Dimension(width, height));
