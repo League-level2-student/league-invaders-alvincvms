@@ -17,10 +17,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	final int GAME_STATE = 1;
 	final int END_STATE = 2;
 	int currentState = MENU_STATE;
+	boolean pressed = false;
 	
 	Font titleFont;
 	Timer timer;
 	GameObject GObject;
+	Rocketship ship = new Rocketship(250, 700, 50, 50);
+	ObjectManager O = new ObjectManager(ship);
 	GamePanel(){
 		timer = new Timer(1000/60, this);
 		titleFont = new Font("Serif", Font.BOLD, 48);
@@ -43,12 +46,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	void updateGameState() {
-		
+		O.update();
 	}
 	
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, LeagueInvaders.width, LeagueInvaders.height);
+		O.draw(g);
 	}
 	
 	void updateEndState() {
@@ -98,26 +102,30 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("typed");
+	
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("pressed");
-		if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+	
+		if(e.getKeyCode() == KeyEvent.VK_ENTER && pressed != true && currentState != GAME_STATE) {
 			currentState++;
 			if(currentState > END_STATE){
                 currentState = MENU_STATE;
 			}
+			pressed = true;
 		}
+		
+        ship.update(e);
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("released");
+	
+		pressed = false;
 	}
 	
 }
