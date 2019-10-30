@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.crypto.spec.OAEPParameterSpec;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -17,7 +18,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	final int GAME_STATE = 1;
 	final int END_STATE = 2;
 	int currentState = MENU_STATE;
-	boolean pressed = false;
+	
 	
 	Font titleFont;
 	Timer timer;
@@ -47,6 +48,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	
 	void updateGameState() {
 		O.update();
+		O.manageEnemies();
+		O.purgeObjects();
 	}
 	
 	void drawGameState(Graphics g) {
@@ -109,23 +112,37 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 	
-		if(e.getKeyCode() == KeyEvent.VK_ENTER && pressed != true && currentState != GAME_STATE) {
+		if(e.getKeyCode() == KeyEvent.VK_ENTER && currentState != GAME_STATE) {
 			currentState++;
 			if(currentState > END_STATE){
                 currentState = MENU_STATE;
 			}
-			pressed = true;
+			
 		}
 		
-        ship.update(e);
+		if(currentState == GAME_STATE && e.getKeyCode() == KeyEvent.VK_SPACE) {
+			O.addProjectile(new Projectile(O.S.x, O.S.y, 10, 10));
+		}
+		fix the keys
+		if(currentState == GAME_STATE && e.getKeyCode() == KeyEvent.VK_LEFT) {
+			O.S.speed = -5;
+		}
+		else if(currentState == GAME_STATE && e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			O.S.speed = 5;
+		}
+		else {
+			O.S.speed = 0;
+		}
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-	
-		pressed = false;
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_LEFT) {
+			O.S.speed = 0;
+		}
+		
 	}
 	
 }

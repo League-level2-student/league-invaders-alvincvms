@@ -10,17 +10,11 @@ public class Rocketship extends GameObject{
 	
 	Rocketship(int x, int y, int width, int height){
 		super(x, y, width, height);
-		speed = 5;
+		speed = 0;
 	}
 	
-	void update(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			x -= speed;
-		}
-		
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			x += speed;
-		}
+	void update() {
+		x += speed;
 	}
 	
 	void draw(Graphics g) {
