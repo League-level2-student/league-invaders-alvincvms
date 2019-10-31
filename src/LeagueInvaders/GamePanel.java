@@ -18,7 +18,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	final int GAME_STATE = 1;
 	final int END_STATE = 2;
 	int currentState = MENU_STATE;
-	
+	boolean spacePressed = false;
 	
 	Font titleFont;
 	Timer timer;
@@ -49,7 +49,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	void updateGameState() {
 		O.update();
 		O.manageEnemies();
+		O.checkCollision();
 		O.purgeObjects();
+		if(O.S.isAlive == false) {
+			currentState = END_STATE;
+		}
 	}
 	
 	void drawGameState(Graphics g) {
@@ -78,10 +82,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		if(currentState == MENU_STATE){
             updateMenuState();
 		}
-		else if(currentState == GAME_STATE){
+		if(currentState == GAME_STATE){
             updateGameState();
 		}
-		else if(currentState == END_STATE){
+		if(currentState == END_STATE){
             updateEndState();
 		}
 
@@ -105,7 +109,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-	
+		if(currentState == GAME_STATE && e.getKeyChar() == ' ' && spacePressed == false) {
+			O.addProjectile(new Projectile(O.S.x, O.S.y, 10, 10));
+			spacePressed = true;
+		}
+		
 	}
 
 	@Override
@@ -120,17 +128,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			
 		}
 		
-		if(currentState == GAME_STATE && e.getKeyCode() == KeyEvent.VK_SPACE) {
-			O.addProjectile(new Projectile(O.S.x, O.S.y, 10, 10));
-		}
-		fix the keys
-		if(currentState == GAME_STATE && e.getKeyCode() == KeyEvent.VK_LEFT) {
+		if(currentState == GAME_STATE && ( e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_LEFT + KeyEvent.VK_SPACE)) {
 			O.S.speed = -5;
 		}
-		else if(currentState == GAME_STATE && e.getKeyCode() == KeyEvent.VK_RIGHT) {
+		
+		if(currentState == GAME_STATE && ( e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_RIGHT + KeyEvent.VK_SPACE)) {
 			O.S.speed = 5;
 		}
-		else {
+		
+		if(e.getKeyCode() != KeyEvent.VK_LEFT && e.getKeyCode() != KeyEvent.VK_RIGHT && e.getKeyCode() != KeyEvent.VK_SPACE) {
 			O.S.speed = 0;
 		}
 		
@@ -139,6 +145,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+		spacePressed = false;
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_LEFT) {
 			O.S.speed = 0;
 		}

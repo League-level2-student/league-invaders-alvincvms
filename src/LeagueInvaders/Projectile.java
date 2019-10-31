@@ -12,6 +12,7 @@ public class Projectile extends GameObject{
 	}
 	
 	void update() {
+		super.update();
 		y -= speed;
 		if(y < 0) {
 			isAlive = false;
@@ -20,6 +21,6 @@ public class Projectile extends GameObject{
 	
 	void draw(Graphics g) {
 		g.setColor(Color.YELLOW);
-		g.fillRect(x+20, y, width, height);
+		g.fillRect(x, y, width, height);
 	}
 }

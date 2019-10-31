@@ -14,6 +14,7 @@ public class ObjectManager {
 	
 	long enemyTimer = 0;
 	int enemySpawnTime = 1000;
+	int score = 0;
 	
 	ObjectManager(Rocketship S) {
 		this.S = S;
@@ -55,15 +56,39 @@ public class ObjectManager {
 	}
 	
 	void purgeObjects() {
-		for(Projectile p : projectiles) {
-			if(p.isAlive = false) {
-				projectiles.remove(p);
+		for(int i = 0; i < projectiles.size();i++) {
+			if(projectiles.get(i).isAlive == false) {
+				projectiles.remove(i);
 			}
 		}
-		for(Alien a : aliens) {
-			if(a.isAlive = false) {
-				aliens.remove(a);
+		
+		for(int i = 0; i < aliens.size();i++) {
+			if(aliens.get(i).isAlive == false) {
+				aliens.remove(i);
+				score++;
 			}
 		}
 	}
+	
+	void checkCollision() {
+		for(Alien a : aliens) {
+			if(S.collisionBox.intersects(a.collisionBox)) {
+				S.isAlive = false;
+			}
+			
+			for(Projectile p : projectiles) {
+				if(p.collisionBox.intersects(a.collisionBox)) {
+					p.isAlive = false;
+					a.isAlive = false;
+					
+				}
+			}
+		}
+		
+	}
+	
+	int getScore() {
+		return score;
+	}
+	
 }
