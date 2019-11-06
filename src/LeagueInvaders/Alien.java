@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Alien extends GameObject{
 	
-	int speed = new Random().nextInt(3)+1;
+	int speed = new Random().nextInt(6)+1;
 	
 	Alien(int x, int y, int width, int height){
 		super(x, y, width, height);
@@ -18,7 +18,6 @@ public class Alien extends GameObject{
 	}
 	
 	void draw(Graphics g) {
-		g.setColor(Color.YELLOW);
-		g.fillRect(x, y, width, height);
+		g.drawImage(GamePanel.alienImg, x, y, width, height, null);
 	}
 }

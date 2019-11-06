@@ -53,6 +53,9 @@ public class ObjectManager {
             addAlien(new Alien(new Random().nextInt(LeagueInvaders.width), 0, 50, 50));
             enemyTimer = System.currentTimeMillis();
 		}
+		if(enemySpawnTime >= 10) {
+		enemySpawnTime = 1000 - (score*8);
+		}
 	}
 	
 	void purgeObjects() {

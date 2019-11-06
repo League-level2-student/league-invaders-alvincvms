@@ -7,8 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.crypto.spec.OAEPParameterSpec;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -25,9 +28,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	GameObject GObject;
 	Rocketship ship = new Rocketship(250, 700, 50, 50);
 	ObjectManager O = new ObjectManager(ship);
+	
+	public static BufferedImage alienImg;
+    public static BufferedImage rocketImg;
+    public static BufferedImage bulletImg;
+    public static BufferedImage spaceImg;
+    
+    
 	GamePanel(){
 		timer = new Timer(1000/60, this);
 		titleFont = new Font("Serif", Font.BOLD, 48);
+		try {
+			alienImg = ImageIO.read(this.getClass().getResourceAsStream("saness.png"));
+			rocketImg = ImageIO.read(this.getClass().getResourceAsStream("u.png"));
+            bulletImg = ImageIO.read(this.getClass().getResourceAsStream("bullet.png"));
+            spaceImg = ImageIO.read(this.getClass().getResourceAsStream("BG.png"));
+		} catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+    	}
 	}
 
 	void startGame() {
@@ -47,18 +66,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	}
 	
 	void updateGameState() {
+		if(O.S.isAlive == false && currentState != MENU_STATE) {
+			currentState = END_STATE;
+		}
 		O.update();
 		O.manageEnemies();
 		O.checkCollision();
 		O.purgeObjects();
-		if(O.S.isAlive == false) {
-			currentState = END_STATE;
-		}
 	}
 	
 	void drawGameState(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, LeagueInvaders.width, LeagueInvaders.height);
+		g.drawImage(spaceImg, 0, 0, LeagueInvaders.width, LeagueInvaders.height, null);
 		O.draw(g);
 	}
 	
@@ -124,6 +142,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			currentState++;
 			if(currentState > END_STATE){
                 currentState = MENU_STATE;
+                ship = new Rocketship(250, 700, 50, 50);
+				O = new ObjectManager(ship);
 			}
 			
 		}

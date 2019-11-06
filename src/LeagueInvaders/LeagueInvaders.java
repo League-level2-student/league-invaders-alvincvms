@@ -32,3 +32,4 @@ public class LeagueInvaders {
         GPanel.startGame();
 	}
 }
+
